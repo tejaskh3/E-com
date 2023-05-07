@@ -10,7 +10,7 @@ const start = async()=>{
   try {
     await connectDB(process.env.MONGO_URI)
     console.log("Connected to database".bgBlue);
-    app.listen(port,()=>{
+    const server = app.listen(port,()=>{
       console.log(`Server is listening on  https://localhost:${port}...`.bgBlue);
     })
   } catch (error) {
@@ -19,3 +19,12 @@ const start = async()=>{
 }
 
 start();
+
+//Unhandled Promise Rejection
+process.on("unhandledRejection",err=>{
+  console.log(`Error: ${err.message}`);
+  console.log(`Shutting down the server due to Undhadled Promise Rejection`);
+  server.close(()=>{
+    process.exit(1);
+  })
+})
